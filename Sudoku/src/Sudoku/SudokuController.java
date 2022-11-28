@@ -110,7 +110,6 @@ public class SudokuController {
                     }
                     cell.setFill(Color.LIGHTSTEELBLUE);
                     System.out.println(selectedCell);
-                    // test
                     // Need to highlight cells with the same value as well
                     setShowIntersects(cellMap, intersectArray);
                 });
