@@ -100,17 +100,22 @@ public class SudokuController {
                 gameGrid.getChildren().add(cell);
                 count++;
                 cellMap.put(count, cell);
-//                Position p = new Position(i, n);
                 int selectedCell = sudoku.grid[n][i];
                 int[] intersectArray = sudoku.intersectionKey.get(selectedCell);
+                Position p = new Position(i, n);
+                int finalCount = count;
                 cell.setOnMouseClicked(event -> {
                     for (int j = 1; j < 82; j++) {
                         Rectangle newCell = cellMap.get(j);
                         newCell.setFill(Color.WHITE);
                     }
                     cell.setFill(Color.LIGHTSTEELBLUE);
+
+                    System.out.println(finalCount);
                     System.out.println(selectedCell);
+
                     // Need to highlight cells with the same value as well
+
                     setShowIntersects(cellMap, intersectArray);
                 });
             }

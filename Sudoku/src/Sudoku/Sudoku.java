@@ -368,7 +368,7 @@ public class Sudoku {
         intersectionKey.put(i, array);
     }
 
-    // Will direct to directories based on selected gamemode and selected difficutly; will randomly select a grid pair
+    // Will direct to directories based on selected difficutly; will randomly select a grid/answerKey pair
     public void textToHashMaps() {
         try {
             InputStream f = new FileInputStream("ExpertGrid_0.txt");
