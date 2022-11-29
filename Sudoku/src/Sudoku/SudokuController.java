@@ -94,7 +94,8 @@ public class SudokuController {
         int count = 0;
         for (int i = 0; i < sudoku.getLength1(); i++) {
             for (int n = 0; n < sudoku.getLength2(); n++) {
-                CellView cv = new CellView(i, n, cellWidth, cellHeight, sudoku);
+                CellView cv = new CellView(i, n, cellWidth, cellHeight, sudoku, count);
+                cv.changeColor(0);
                 gameGrid.getChildren().add(cv);
                 count++;
 //                cellMap.put(count, cell);
@@ -116,6 +117,8 @@ public class SudokuController {
                     System.out.println(selectedCell);
 
                     // Need to highlight cells with the same value as well
+
+//                    cv.changeCellValue(8);
 
 //                    setShowIntersects(cellMap, intersectArray);
                 });
