@@ -42,6 +42,8 @@ public class CellView extends Parent {
     public void changeCellValue(int x) {
         sudoku.currentKey.put(index, x);
         label.setText("" + x);
+        int answerKeyAns = sudoku.answerKey.get(index);
+        int currentKeyAns = sudoku.currentKey.get(index);
         if (sudoku.currentKey.get(index) != sudoku.answerKey.get(index)) {
             changeColor(4);
         } else {

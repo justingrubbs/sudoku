@@ -6,6 +6,8 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
+
 import java.util.HashMap;
 
 
@@ -94,33 +96,44 @@ public class SudokuController {
         int count = 0;
         for (int i = 0; i < sudoku.getLength1(); i++) {
             for (int n = 0; n < sudoku.getLength2(); n++) {
-                CellView cv = new CellView(i, n, cellWidth, cellHeight, sudoku, count);
-                cv.changeColor(0);
-                gameGrid.getChildren().add(cv);
+                Rectangle cell = new Rectangle(n * cellWidth, i * cellHeight, cellWidth, cellHeight);
+                Label label = new Label("");
+                label.setFont(new Font("Arial", 30));
+                if (sudoku.currentKey.get((9 * n) + (i + 1)) != 0) {
+                    label.setText("" + sudoku.currentKey.get((9 * n) + (i + 1)));
+                } else {
+                    label.setText("");
+                }
+                cell.setFill(Color.WHITE);
+                cell.setStroke(Color.BLACK);
+                label.setTranslateX(i * cellWidth + (cellWidth / 3) - 1);
+                label.setTranslateY(n * cellHeight + (cellHeight / 3) - 9);
+                gameGrid.getChildren().add(label);
+                gameGrid.getChildren().add(cell);
                 count++;
-//                cellMap.put(count, cell);
+                cellMap.put(count, cell);
                 int selectedCell = sudoku.grid[n][i];
                 int[] intersectArray = sudoku.intersectionKey.get(selectedCell);
                 Position p = new Position(i, n);
+
                 int finalCount = count;
-                cv.setOnMouseClicked(event -> {
-//                    for (int j = 1; j < 82; j++) {
-//                        Rectangle newCell = cellMap.get(j);
-//                        newCell.setFill(Color.WHITE);
-//                    }
+//                int finalI = i;
+//                int finalN = n;
 
-                    cv.changeColor(1);
+                cell.setOnMouseClicked(event -> {
+                    for (int j = 1; j < 82; j++) {
+                        Rectangle newCell = cellMap.get(j);
+                        newCell.setFill(Color.WHITE);
+                    }
+                    cell.setFill(Color.LIGHTSTEELBLUE);
 
-//                    System.out.println((9 * i) + (n + 1));
-
+//                    System.out.println((9 * finalI) + (finalN + 1));
                     System.out.println(finalCount);
                     System.out.println(selectedCell);
 
                     // Need to highlight cells with the same value as well
 
-//                    cv.changeCellValue(8);
-
-//                    setShowIntersects(cellMap, intersectArray);
+                    setShowIntersects(cellMap, intersectArray);
                 });
             }
         }

@@ -6,6 +6,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
 
 import java.util.HashMap;
 
@@ -96,10 +97,18 @@ public class SudokuController {
         for (int i = 0; i < sudoku.getLength1(); i++) {
             for (int n = 0; n < sudoku.getLength2(); n++) {
                 Rectangle cell = new Rectangle(n * cellWidth, i * cellHeight, cellWidth, cellHeight);
-//                Label label = new Label("" + sudoku.currentKey.get((9 * i) + (n + 1)));
+                Label label = new Label("");
+                label.setFont(new Font("Arial", 30));
+                if (sudoku.currentKey.get((9 * n) + (i + 1)) != 0) {
+                    label.setText("" + sudoku.currentKey.get((9 * n) + (i + 1)));
+                } else {
+                    label.setText("");
+                }
                 cell.setFill(Color.WHITE);
                 cell.setStroke(Color.BLACK);
-//                gameGrid.getChildren().add(label);
+                label.setTranslateX(i * cellWidth + (cellWidth / 3) - 1);
+                label.setTranslateY(n * cellHeight + (cellHeight / 3) - 9);
+                gameGrid.getChildren().add(label);
                 gameGrid.getChildren().add(cell);
                 count++;
                 cellMap.put(count, cell);
