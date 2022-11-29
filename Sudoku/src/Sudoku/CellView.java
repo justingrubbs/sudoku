@@ -12,7 +12,8 @@ public class CellView extends Parent {
     private Sudoku sudoku;
 
 
-    public CellView(int y,  int x, double width, double height) {
+    public CellView(int y,  int x, double width, double height, Sudoku sudoku) {
+        this.sudoku = sudoku;
         this.cell = new Rectangle(0, 0, width, height);
         this.label = new Label("" + sudoku.currentKey.get((9 * y) + (x + 1)));
 

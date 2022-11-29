@@ -94,7 +94,7 @@ public class SudokuController {
         int count = 0;
         for (int i = 0; i < sudoku.getLength1(); i++) {
             for (int n = 0; n < sudoku.getLength2(); n++) {
-                CellView cv = new CellView(i, n, cellWidth, cellHeight);
+                CellView cv = new CellView(i, n, cellWidth, cellHeight, sudoku);
                 gameGrid.getChildren().add(cv);
                 count++;
 //                cellMap.put(count, cell);
