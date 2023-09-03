@@ -25,13 +25,7 @@ public enum Difficulty {
         public int getDifficulty() {
             return 4;
         }
-    },
-    EVIL {
-        @Override
-        public int getDifficulty() {
-            return 5;
-        }
-    };
+    },;
 
     public abstract int getDifficulty();
 }

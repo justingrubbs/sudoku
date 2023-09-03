@@ -1,18 +1,24 @@
 package Sudoku;
 import java.io.*;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Random;
 
 public class Sudoku {
 
 
     public final int[][] grid = new int [9][9];
-
     public HashMap<Integer, Integer> answerKey = new HashMap<>(81);
     public HashMap<Integer, Integer> currentKey = new HashMap<>(81);
     public HashMap<Integer, int[]> intersectionKey = new HashMap<>(81);
+    public HashMap<Integer, ArrayList<Integer>> pencilKey = new HashMap<>(81);
+    public HashMap<Integer, ArrayList<Integer>> matchingCellKey = new HashMap<>(9);
+    public ArrayList<Integer> staticCells = new ArrayList<>(0);
+    public ArrayList<Integer> wrongCells = new ArrayList<>(0);
+    public boolean gameOver = false;
 
 
-    public Sudoku() {
+    public Sudoku(Difficulty difficulty) {
         int count = 1;
         for (int i = 0; i < grid.length; i++) {
             for (int n = 0; n < grid[0].length; n++) {
@@ -20,19 +26,8 @@ public class Sudoku {
                 count++;
             }
         }
-        textToHashMaps();
-        // iterating through keys
-//        System.out.print("\nKeys: ");
-//        for(Integer key: currentKey.keySet()) {
-//            System.out.print(key);
-//            System.out.print(", ");
-//        }
-//        // iterating through values
-//        System.out.print("\nValues: ");
-//        for(Integer value: currentKey.values()) {
-//            System.out.print(value);
-//            System.out.print(", ");
-//        }
+        textToHashMaps(difficulty);
+        initializeSimilarCellMap();
     }
 
     public int getLength1() {
@@ -119,6 +114,7 @@ public class Sudoku {
         }
         return array;
     }
+
     public int[] getIntersectionColumns(int[] array, int i) {
         if ((i >= 1) && (i <= 9)) {
             array[6] = i + 27;
@@ -193,6 +189,7 @@ public class Sudoku {
         }
         return array;
     }
+
     public int[] getIntersectionBoxes(int[] array, int i) {
         int[] temp = new int[9];
         if (((i >= 1) && (i <= 3)) || ((i >= 10) && (i <= 12)) || ((i >= 19) && (i <= 21))) {
@@ -360,6 +357,18 @@ public class Sudoku {
         return array;
     }
 
+    public void initializeSimilarCellMap() {
+        for (int i = 1; i < 10; i++) {
+            ArrayList<Integer> temp = new ArrayList<>(0);
+            for (Integer key : currentKey.keySet()) {
+                if (currentKey.get(key) == i) {
+                    temp.add(key);
+                }
+            }
+            matchingCellKey.put(i, temp);
+        }
+    }
+
     public void getIntersectionMap(int i) {
         int[] array = new int[20];
         array = getIntersectionRows(array, i);
@@ -368,41 +377,56 @@ public class Sudoku {
         intersectionKey.put(i, array);
     }
 
-    // Will direct to directories based on selected difficutly; will randomly select a grid/answerKey pair
-    public void textToHashMaps() {
+    public boolean isCurrentKeyFilled() {
+        return !currentKey.containsValue(0);
+    }
+
+    public boolean gameWonOrLost() {
+        return (wrongCells.size() == 0);
+    }
+
+    public void textToHashMaps(Difficulty difficulty) {
+        Random rand = new Random();
+        InputStream f;
+        int randomInt = rand.nextInt(0, 2);
         try {
-            InputStream f = new FileInputStream("ExpertGrid_0.txt");
+//            https://www.tutorialspoint.com/java/java_files_io.htm
+            if (difficulty.getDifficulty() == 1) {
+                f = new FileInputStream("src/EASY/EasyGrid_" + randomInt + ".txt");
+            } else if (difficulty.getDifficulty() == 2) {
+                f = new FileInputStream("src/MEDIUM/MediumGrid_" + randomInt + ".txt");
+            } else if (difficulty.getDifficulty() == 3) {
+                f = new FileInputStream("src/HARD/HardGrid_" + randomInt + ".txt");
+            } else {
+                f = new FileInputStream("src/EXPERT/ExpertGrid_" + randomInt + ".txt");
+            }
             int size = f.available() + 1;
             for(int i = 1; i < size; i++) {
                 getIntersectionMap(i);
                 int n = f.read();
                 currentKey.put(i, n - 48);
+                if (n - 48 != 0) {
+                    staticCells.add(i);
+                }
             }
             f.close();
-            f = new FileInputStream("ExpertGridKey_0.txt");
+            if (difficulty.getDifficulty() == 1) {
+                f = new FileInputStream("src/EASY/EasyGridKey_" + randomInt + ".txt");
+            } else if (difficulty.getDifficulty() == 2) {
+                f = new FileInputStream("src/MEDIUM/MediumGridKey_" + randomInt + ".txt");
+            } else if (difficulty.getDifficulty() == 3) {
+                f = new FileInputStream("src/HARD/HardGridKey_" + randomInt + ".txt");
+            } else {
+                f = new FileInputStream("src/EXPERT/ExpertGridKey_" + randomInt + ".txt");
+            }
             size = f.available() + 1;
             for(int i = 1; i < size; i++) {
                 int n = f.read();
                 answerKey.put(i, n - 48);
             }
             f.close();
-
-//            int count = 1;
-//        for(int[] value: intersectionKey.values()) {
-//            System.out.print("Key: " + count + "\n");
-//            count++;
-//            for (int i = 0; i < value.length; i++) {
-//                System.out.println(value[i]);
-//            }
-//        }
-
-//            System.out.println(currentKey);
-//            System.out.println(answerKey);
-
         } catch (IOException ioe) {
             System.out.println("IOException Error");
         }
-        System.out.println(currentKey);
-        System.out.println(answerKey);
     }
 }
